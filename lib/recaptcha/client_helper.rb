@@ -38,9 +38,10 @@ module Recaptcha
           </script>
         EOS
       else
-        if options[:display] && options[:display][:custom_theme_widget]
+        if options[:display] && options[:display][:theme] == 'custom'
+          widget = options[:display][:custom_theme_widget] || 'recaptcha_widget'
           html << <<-EOS
-           <div id="recaptcha_widget" style="display:none">
+           <div id="#{widget}" style="display:none">
 
              <div id="recaptcha_image"></div>
              <div class="recaptcha_only_if_incorrect_sol" style="color:red">Incorrect please try again</div>
