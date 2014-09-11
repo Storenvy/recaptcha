@@ -38,7 +38,12 @@ module Recaptcha
           </script>
         EOS
       else
+
         if options[:display] && options[:display][:theme] == 'custom'
+
+          # Prints raw HTML Recaptcha widget so that it may be styled via CSS
+          # More info: https://developers.google.com/recaptcha/docs/customization?csw=1
+
           widget = options[:display][:custom_theme_widget] || 'recaptcha_widget'
           html << <<-EOS
            <div id="#{widget}" style="display:none">
