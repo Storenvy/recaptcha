@@ -46,23 +46,31 @@ module Recaptcha
 
           widget = options[:display][:custom_theme_widget] || 'recaptcha_widget'
           html << <<-EOS
-           <div id="#{widget}" style="display:none">
-
-             <div id="recaptcha_image"></div>
-             <div class="recaptcha_only_if_incorrect_sol" style="color:red">Incorrect please try again</div>
-
-             <span class="recaptcha_only_if_image">Enter the words above:</span>
-             <span class="recaptcha_only_if_audio">Enter the numbers you hear:</span>
-
-             <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
-
-             <div><a href="javascript:Recaptcha.reload()">Get another CAPTCHA</a></div>
-             <div class="recaptcha_only_if_image"><a href="javascript:Recaptcha.switch_type('audio')">Get an audio CAPTCHA</a></div>
-             <div class="recaptcha_only_if_audio"><a href="javascript:Recaptcha.switch_type('image')">Get an image CAPTCHA</a></div>
-
-             <div><a href="javascript:Recaptcha.showhelp()">Help</a></div>
-
-           </div>
+            <div id="recaptcha_widget" style="display:none" class="recaptcha_widget">
+              <div id="recaptcha_image"></div>
+              <div class="recaptcha_only_if_incorrect_sol">Incorrect. Please try again.</div>
+              <div class="recaptcha_footer">
+                <div class="recaptcha_input">
+                  <label class="recaptcha_only_if_image recaptcha_hide" for="recaptcha_response_field">Enter the words above:</label>
+                  <label class="recaptcha_only_if_audio recaptcha_hide" for="recaptcha_response_field">Enter the numbers you hear:</label>
+                  <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" autocomplete="off" placeholder="Prove you're a human!" class="text">
+                </div>
+                <div class="recaptcha_buttons">
+                  <div class="recaptcha_btn">
+                    <a class="refresh_icon" href="javascript:Recaptcha.reload()">Get another CAPTCHA</a>
+                  </div>
+                  <div class="recaptcha_only_if_image recaptcha_btn">
+                    <a class="audio_icon" href="javascript:Recaptcha.switch_type('audio')">Get an audio CAPTCHA</a>
+                  </div>
+                  <div class="recaptcha_only_if_audio recaptcha_btn">
+                    <a class="text_icon" href="javascript:Recaptcha.switch_type('image')">Get an image CAPTCHA</a>
+                  </div>
+                  <div class="recaptcha_btn">
+                    <a class="help_icon" href="javascript:Recaptcha.showhelp()">Help</a>
+                  </div>
+                </div>
+              </div>
+            </div>
           EOS
         end
         html << %{<script type="text/javascript" src="#{uri}/challenge?k=#{key}}
