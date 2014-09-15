@@ -2,7 +2,7 @@ module Recaptcha
   module ClientHelper
     # Your public API can be specified in the +options+ hash or preferably
     # using the Configuration.
-    def recaptcha_tags(options = {})
+    def recaptcha_tags(options = {}, &block)
       # Default options
       key   = options[:public_key] ||= Recaptcha.configuration.public_key
       raise RecaptchaError, "No public key specified." unless key
@@ -41,29 +41,34 @@ module Recaptcha
 
         if options[:display] && options[:display][:theme] == 'custom'
 
-          # Prints raw HTML Recaptcha widget so that it may be styled via CSS
-          # More info: https://developers.google.com/recaptcha/docs/customization?csw=1
+          if block_given?
+            html << capture(&block)
+          else
 
-          widget = options[:display][:custom_theme_widget] || 'recaptcha_widget'
-          html << <<-EOS
-           <div id="#{widget}" style="display:none">
+            # Prints raw HTML Recaptcha widget so that it may be styled via CSS
+            # More info: https://developers.google.com/recaptcha/docs/customization?csw=1
 
-             <div id="recaptcha_image"></div>
-             <div class="recaptcha_only_if_incorrect_sol" style="color:red">Incorrect please try again</div>
+            widget = options[:display][:custom_theme_widget] || 'recaptcha_widget'
+            html << <<-EOS
+            <div id="#{widget}" style="display:none">
 
-             <span class="recaptcha_only_if_image">Enter the words above:</span>
-             <span class="recaptcha_only_if_audio">Enter the numbers you hear:</span>
+              <div id="recaptcha_image"></div>
+              <div class="recaptcha_only_if_incorrect_sol" style="color:red">Incorrect please try again</div>
 
-             <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
+              <span class="recaptcha_only_if_image">Enter the words above:</span>
+              <span class="recaptcha_only_if_audio">Enter the numbers you hear:</span>
 
-             <div><a href="javascript:Recaptcha.reload()">Get another CAPTCHA</a></div>
-             <div class="recaptcha_only_if_image"><a href="javascript:Recaptcha.switch_type('audio')">Get an audio CAPTCHA</a></div>
-             <div class="recaptcha_only_if_audio"><a href="javascript:Recaptcha.switch_type('image')">Get an image CAPTCHA</a></div>
+              <input type="text" id="recaptcha_response_field" name="recaptcha_response_field" />
 
-             <div><a href="javascript:Recaptcha.showhelp()">Help</a></div>
+              <div><a href="javascript:Recaptcha.reload()">Get another CAPTCHA</a></div>
+              <div class="recaptcha_only_if_image"><a href="javascript:Recaptcha.switch_type('audio')">Get an audio CAPTCHA</a></div>
+              <div class="recaptcha_only_if_audio"><a href="javascript:Recaptcha.switch_type('image')">Get an image CAPTCHA</a></div>
 
-           </div>
-          EOS
+              <div><a href="javascript:Recaptcha.showhelp()">Help</a></div>
+
+            </div>
+            EOS
+          end
         end
         html << %{<script type="text/javascript" src="#{uri}/challenge?k=#{key}}
         html << %{#{error ? "&amp;error=#{CGI::escape(error)}" : ""}}
