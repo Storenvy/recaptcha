@@ -48,7 +48,6 @@ module Recaptcha
           html << <<-EOS
             <div id="recaptcha_widget" style="display:none" class="recaptcha_widget">
               <div id="recaptcha_image"></div>
-              <div class="recaptcha_only_if_incorrect_sol">Incorrect. Please try again.</div>
               <div class="recaptcha_footer">
                 <div class="recaptcha_input">
                   <label class="recaptcha_only_if_image recaptcha_hide" for="recaptcha_response_field">Enter the words above:</label>
